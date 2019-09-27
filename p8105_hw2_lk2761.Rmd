@@ -7,5 +7,21 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(readxl)
 ```
+
+## Problem 1
+
+This problem uses the Mr. Trash Wheel dataset. 
+
+```{r clean Mr. Trash Wheel sheet}
+# import Mr. Trash Wheel sheet 
+trash_wheel_data = 
+  read_excel("data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
+             sheet = 1, 
+             range = cell_cols("A:N"))
+```
+
 
