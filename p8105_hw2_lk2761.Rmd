@@ -33,12 +33,23 @@ trash_wheel_data =
 precip_2017 = 
   read_excel("data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
              sheet = 4) %>%
-  janitor::clean_names(dat = .) 
-
+  janitor::clean_names(dat = .) %>%
+  rename(.data = ., month = precipitation_in, total_inches = x2) %>%
+  filter(.data = ., month != "Month") %>%
+  drop_na(data = .)  %>%
+  mutate(.data = ., year = 2017) 
+  
 precip_2018 = 
    read_excel("data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
              sheet = 3) %>%
-  janitor::clean_names(dat = .) 
+  janitor::clean_names(dat = .) %>%
+  rename(.data = ., month = precipitation_in, total_inches = x2) %>%
+  filter(.data = ., month != "Month") %>%
+  drop_na(data = .) %>%
+  mutate(.data = ., year = 2018) 
+
+# create new dataset by combining precip_2017 and precip_2018
+precip_combined = bind_rows(precip_2017, precip_2018)
 ```
 
 
