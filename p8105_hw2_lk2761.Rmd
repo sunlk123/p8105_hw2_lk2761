@@ -17,7 +17,7 @@ library(readxl)
 This problem uses the Mr. Trash Wheel dataset. 
 
 ```{r clean Mr. Trash Wheel sheet}
-# import Mr. Trash Wheel sheet 
+# import and clean Mr. Trash Wheel sheet 
 trash_wheel_data = 
   read_excel("data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
              sheet = 1, 
@@ -27,6 +27,18 @@ trash_wheel_data =
   mutate(.data = ., 
          round(sports_balls, digits = 0),
          as.integer(sports_balls))
+```
+
+```{r df for precipitation 2017 and 2018}
+precip_2017 = 
+  read_excel("data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
+             sheet = 4) %>%
+  janitor::clean_names(dat = .) 
+
+precip_2018 = 
+   read_excel("data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
+             sheet = 3) %>%
+  janitor::clean_names(dat = .) 
 ```
 
 
