@@ -92,7 +92,7 @@ unemploy_tidy_data =
     unemploy_df,
     jan:dec,
     names_to = "month",
-    values_to = "percent_unemploy"
+    values_to = "percent_unemploy",
   )
 ```
 
@@ -100,6 +100,12 @@ unemploy_tidy_data =
 ```{r}
 baby_names_df = 
   read.csv("./data/Popular_Baby_Names.csv") %>%
-  janitor::clean_names(dat = .)
+  janitor::clean_names(dat = .) %>%
+  rename(.data = ., child_first_name = child_s_first_name) %>%
+  mutate(.data = ., 
+         ethnicity = recode(ethnicity, 
+                            `ASIAN AND PACI` = "ASIAN AND PACIFIC ISLANDER",
+                            `BLACK NON HISP` = "BLACK NON HISPANIC",
+                            `WHITE NON HISP` = "WHITE NON HISPANIC"))
 ```
 
