@@ -92,4 +92,10 @@ unemploy_tidy_data =
   )
 ```
 
+## Problem 3
+```{r}
+baby_names_df = 
+  read.csv("./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names(dat = .)
+```
 
