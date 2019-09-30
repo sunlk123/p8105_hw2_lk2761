@@ -106,6 +106,7 @@ baby_names_df =
          ethnicity = recode(ethnicity, 
                             `ASIAN AND PACI` = "ASIAN AND PACIFIC ISLANDER",
                             `BLACK NON HISP` = "BLACK NON HISPANIC",
-                            `WHITE NON HISP` = "WHITE NON HISPANIC"))
+                            `WHITE NON HISP` = "WHITE NON HISPANIC")) %>%
+  distinct(.data = ., .keep_all = FALSE)
 ```
 
