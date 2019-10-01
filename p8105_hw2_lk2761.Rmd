@@ -120,6 +120,21 @@ olivia_table =
   baby_names_df %>%
   filter(.data = ., child_first_name == "OLIVIA") %>%
   pivot_wider(names_from = "year_of_birth",
-              values_from = "ethnicity")
+              values_from = "ethnicity") %>%
+  select(.data = ., child_first_name, rank, "2016", "2015", "2014", "2013", "2012", "2011", count, -gender)
+```
+
+Scatterpolot for popularity of name for male, white non-hispanic children born in 2016
+
+```{r create scatterplot}
+male_name_2016 = 
+  baby_names_df %>%
+  filter(.data = ., 
+         year_of_birth == "2016" & 
+         gender == "MALE" & 
+         ethnicity == "WHITE NON HISPANIC")
+
+ggplot(male_name_2016, aes(x = rank, y = count)) +
+  geom_point()
 ```
 
