@@ -14,12 +14,12 @@ library(readxl)
 
 ## Problem 1
 
-This problem uses the Mr. Trash Wheel dataset. 
+This problem uses the 2019 Mr. Trash Wheel dataset. 
 
 ```{r clean Mr. Trash Wheel sheet}
 # import and clean Mr. Trash Wheel sheet 
 trash_wheel_data = 
-  read_excel("data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
+  read_excel("data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", 
              sheet = 1, 
              range = cell_cols("A:N")) %>%
   janitor::clean_names(dat = .) %>%
