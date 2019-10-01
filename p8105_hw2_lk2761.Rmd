@@ -97,7 +97,11 @@ unemploy_tidy_data =
 ```
 
 ## Problem 3
-```{r}
+
+We are using the NYC Popular Baby Names dataset. 
+
+```{r baby_names dataframe}
+# import Popular_Baby_Names csv and clean data 
 baby_names_df = 
   read.csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names(dat = .) %>%
@@ -109,5 +113,13 @@ baby_names_df =
                             `BLACK NON HISP` = "BLACK NON HISPANIC",
                             `WHITE NON HISP` = "WHITE NON HISPANIC")) %>%
   distinct(.data = ., .keep_all = FALSE)
+```
+
+```{r create table}
+olivia_table = 
+  baby_names_df %>%
+  filter(.data = ., child_first_name == "OLIVIA") %>%
+  pivot_wider(names_from = "year_of_birth",
+              values_from = "ethnicity")
 ```
 
