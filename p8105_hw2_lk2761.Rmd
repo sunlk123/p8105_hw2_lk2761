@@ -65,7 +65,7 @@ precip_combined =
   select(.data = ., year, month, total_in, -total_inches)
 ```
 
-The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(trash_wheel_data, sports_balls_int)` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches.
+The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches.
 
 ## Problem 2
 
@@ -87,6 +87,8 @@ pols_month_df =
 ```
 
 ```{r snp dataframe}
+# import and clean S&P closing data 
+
 snp_df =
   read.csv("./data/fivethirtyeight_datasets/snp.csv") %>%
   janitor::clean_names(dat = .) %>%
@@ -102,7 +104,7 @@ snp_df =
 unemploy_df =
   read.csv("./data/fivethirtyeight_datasets/unemployment.csv") %>%
   janitor::clean_names(dat = .)
-
+  
 # convert the months from rows to columns in the unemployment data frame
 
 unemploy_tidy_data = 
@@ -110,8 +112,16 @@ unemploy_tidy_data =
     unemploy_df,
     jan:dec,
     names_to = "month",
-    values_to = "percent_unemploy",
-  )
+    values_to = "percent_unemploy")
+```
+
+The following code chunk combines the three individual datasets, seen above, together.
+
+```{r merge datasets}
+# merge pols_month_df and snp_df 
+
+pol_snp_data =
+  left_join(snp_df, pols_month_df, by = c("year", "month"))
 ```
 
 ## Problem 3
