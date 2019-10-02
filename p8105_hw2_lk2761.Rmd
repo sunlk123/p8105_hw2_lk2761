@@ -103,16 +103,35 @@ snp_df =
 
 unemploy_df =
   read.csv("./data/fivethirtyeight_datasets/unemployment.csv") %>%
-  janitor::clean_names(dat = .)
-  
+  janitor::clean_names(dat = .) 
+
 # convert the months from rows to columns in the unemployment data frame
 
-unemploy_tidy_data = 
+unemploy_data_col = 
   pivot_longer(
     unemploy_df,
     jan:dec,
     names_to = "month",
     values_to = "percent_unemploy")
+  
+# convert the abbreviated months to full names 
+
+unemploy_tidy_data = 
+  unemploy_data_col %>%
+  mutate(.data = ., 
+         month = recode(month, 
+                        `jan` = "January", 
+                        `feb` = "February",
+                        `mar` = "March", 
+                        `apr` = "April",
+                        `may` = "May",
+                        `jun` = "June",
+                        `jul` = "July",
+                        `aug` = "August",
+                        `sep` = "September",
+                       `oct` = "October",
+                        `nov` = "November",
+                        `dec` = "December"))
 ```
 
 The following code chunk combines the three individual datasets, seen above, together.
@@ -121,7 +140,13 @@ The following code chunk combines the three individual datasets, seen above, tog
 # merge pols_month_df and snp_df 
 
 pol_snp_data =
-  left_join(snp_df, pols_month_df, by = c("year", "month"))
+  left_join(snp_df, pols_month_df, by = c("year", "month")) %>%
+  mutate(.data = ., year = as.integer(year))
+
+# merge unemploy_tidy_data into pols_snp_data 
+
+pol_snp_unemploy_data =
+  left_join(unemploy_tidy_data, pol_snp_data, by = c("year", "month"))
 ```
 
 ## Problem 3
