@@ -1,12 +1,20 @@
 ---
 title: "p8105_hw2_lk2761"
+
 author: "Lorraine Kwok"
+
 date: "09/27/2019"
+
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+  )
 
 library(tidyverse)
 library(readxl)
@@ -65,14 +73,14 @@ precip_combined =
   select(.data = ., year, month, total_in, -total_inches)
 ```
 
-The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches.
+The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. The total preciptation in 2018 was `r 
 
 ## Problem 2
 
 We are now using the FiveThirtyEight data.
 
 ```{r pols_month dataframe}
-# create dataframe with polling data 
+# create dataframe with data on politicians
 # In this dataset, for prez_gop, there were values of "2," which still resulted in coding of "0" in the prez_dem variable. 
 
 pols_month_df =
@@ -149,6 +157,8 @@ pol_snp_unemploy_data =
   left_join(unemploy_tidy_data, pol_snp_data, by = c("year", "month"))
 ```
 
+As a result of merging three separate datasets, the resulting dataset is `r nrow(pol_snp_unemploy_data)` rows by `r ncol(pol_snp_unemploy_data)` columns. The dataset includes data on national politicians (governors, senators, presidents and representatives) and whether they are Democratic or Republican at a given year, the closing values of the Standard & Poor's (S&P) stock market index in a given month and year, and the percentage of unemployment in a given month and year. 
+
 ## Problem 3
 
 We are using the NYC Popular Baby Names dataset. 
@@ -171,13 +181,13 @@ baby_names_df =
 
 Creating a reader-friendly table showing the rank in popularity of the name "Olivia" as a female baby name over time 
 
-```{r create table}
-olivia_table = 
-  baby_names_df %>%
+```{r create table for Olivia}
+baby_names_df %>%
   filter(.data = ., child_first_name == "OLIVIA") %>%
   pivot_wider(names_from = "year_of_birth",
               values_from = "ethnicity") %>%
-  select(.data = ., child_first_name, rank, "2016", "2015", "2014", "2013", "2012", "2011", count, -gender)
+  select(.data = ., child_first_name, rank, count, "2016", "2015", "2014", "2013", "2012", "2011", -gender) %>%
+  knitr::kable() 
 ```
 
 We are creating a reader-friendly table showing the most popular male name for all ethnicities and all years. 
@@ -189,7 +199,8 @@ male_pop_name =
   filter(.data = ., gender == "MALE", rank == "1") %>%
   pivot_wider(names_from = "year_of_birth",
               values_from = "child_first_name") %>%
-  select(.data = ., gender, ethnicity, rank, count, everything())
+  select(.data = ., gender, ethnicity, rank, count, everything()) %>%
+  knitr::kable()
 ```
 
 We will not create a scatterplot to display the data on the popularity of first names for male, white non-hispanic children born in 2016
