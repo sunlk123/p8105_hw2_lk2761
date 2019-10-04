@@ -34,10 +34,10 @@ trash_wheel_data =
   janitor::clean_names(dat = .) %>%
   drop_na(data = ., dumpster) %>%
   mutate(.data = ., 
-         sports_balls_rd = round(sports_balls, digits = 0),
+         sports_balls = round(sports_balls, digits = 0),
          sports_balls_int = as.integer(sports_balls),
          homes_powered_rd = round(homes_powered, digits = 2)) %>%
-  select(.data = ., -sports_balls, -sports_balls_rd, -homes_powered)
+  select(.data = ., -sports_balls, -homes_powered)
 
 trash_wheel_data
 ```
@@ -81,7 +81,9 @@ precip_combined =
 precip_combined
 ```
 
-The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. 
+The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland, as denoted by the variable *weight_tons* between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume, denoted by *volume_cubic_yards* is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. 
+
+The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. 
 
 ## Problem 2
 
@@ -174,7 +176,7 @@ pol_snp_unemploy_data =
   left_join(unemploy_tidy_data, pol_snp_data, by = c("year", "month"))
 ```
 
-As a result of merging three separate datasets, the resulting dataset is `r nrow(pol_snp_unemploy_data)` rows by `r ncol(pol_snp_unemploy_data)` columns. The data are from  This dataset consists of key variables around whether  national politicians (governors, senators, presidents and representatives) were Democratic or Republican at a given year, the closing values of the Standard & Poor's (S&P) stock market index in a given month and year, and the percentage of unemployment in a given month and year. 
+As a result of merging three separate datasets, the resulting dataset is `r nrow(pol_snp_unemploy_data)` rows by `r ncol(pol_snp_unemploy_data)` columns. The data are for the years, 1948-2015. This dataset consists of key variables around whether  national politicians (governors, senators, presidents and representatives) were Democratic or Republican at a given year (*gov_gop*, *gov_dem*, *sen_gop*, *sen_dem*, *rep_gop*, *rep_dem*, *president*), the closing values of the Standard & Poor's (S&P) stock market index in a given month and year (*closing_values*), and the percentage of unemployment in a given month and year (*percent_unemploy*). 
 
 ## Problem 3
 
@@ -218,7 +220,7 @@ baby_names_df %>%
   knitr::kable()
 ```
 
-We will not create a scatterplot to display the data on the popularity of first names for male, white non-hispanic children born in 2016
+We will now create a scatterplot to display the data on the popularity of first names for male, white non-hispanic children born in 2016
 
 ```{r create scatterplot}
 baby_names_df %>%
