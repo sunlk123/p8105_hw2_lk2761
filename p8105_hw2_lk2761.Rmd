@@ -38,6 +38,8 @@ trash_wheel_data =
          sports_balls_int = as.integer(sports_balls),
          homes_powered_rd = round(homes_powered, digits = 2)) %>%
   select(.data = ., -sports_balls, -sports_balls_rd, -homes_powered)
+
+trash_wheel_data
 ```
 
 ```{r df for precipitation 2017 and 2018}
@@ -52,6 +54,8 @@ precip_2017 =
   drop_na(data = .)  %>%
   mutate(.data = ., year = 2017) 
 
+precip_2017
+
 # import and clean 2018 precipitation data
 
 precip_2018 = 
@@ -63,6 +67,8 @@ precip_2018 =
   drop_na(data = .) %>%
   mutate(.data = ., year = 2018) 
 
+precip_2018
+
 # create new dataset by combining precip_2017 and precip_2018
 
 precip_combined = 
@@ -71,9 +77,11 @@ precip_combined =
          total_in = round(as.numeric(total_inches), digits = 2),
          month = month.name[as.numeric(month)]) %>%
   select(.data = ., year, month, total_in, -total_inches)
+
+precip_combined
 ```
 
-The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. The total preciptation in 2018 was `r 
+The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. 
 
 ## Problem 2
 
@@ -92,6 +100,8 @@ pols_month_df =
          president = prez_dem,
          month = month.name[as.numeric(month)]) %>%
   select(.data = ., -prez_dem, -prez_gop, -day)
+
+pols_month_df
 ```
 
 ```{r snp dataframe}
@@ -104,6 +114,8 @@ snp_df =
   separate(., date, into = c("month", "day", "year")) %>% 
   select(.data = ., year, everything(), -day) %>%
   mutate(.data = ., month = month.name[as.numeric(month)])
+
+snp_df
 ```
 
 ```{r unemployment dataframe}
@@ -113,6 +125,7 @@ unemploy_df =
   read.csv("./data/fivethirtyeight_datasets/unemployment.csv") %>%
   janitor::clean_names(dat = .) 
 
+unemploy_df
 # convert the months from rows to columns in the unemployment data frame
 
 unemploy_data_col = 
@@ -121,7 +134,9 @@ unemploy_data_col =
     jan:dec,
     names_to = "month",
     values_to = "percent_unemploy")
-  
+
+unemploy_data_col
+
 # convert the abbreviated months to full names 
 
 unemploy_tidy_data = 
@@ -140,6 +155,8 @@ unemploy_tidy_data =
                        `oct` = "October",
                         `nov` = "November",
                         `dec` = "December"))
+
+unemploy_tidy_data
 ```
 
 The following code chunk combines the three individual datasets, seen above, together.
@@ -157,7 +174,7 @@ pol_snp_unemploy_data =
   left_join(unemploy_tidy_data, pol_snp_data, by = c("year", "month"))
 ```
 
-As a result of merging three separate datasets, the resulting dataset is `r nrow(pol_snp_unemploy_data)` rows by `r ncol(pol_snp_unemploy_data)` columns. The dataset includes data on national politicians (governors, senators, presidents and representatives) and whether they are Democratic or Republican at a given year, the closing values of the Standard & Poor's (S&P) stock market index in a given month and year, and the percentage of unemployment in a given month and year. 
+As a result of merging three separate datasets, the resulting dataset is `r nrow(pol_snp_unemploy_data)` rows by `r ncol(pol_snp_unemploy_data)` columns. The data are from  This dataset consists of key variables around whether  national politicians (governors, senators, presidents and representatives) were Democratic or Republican at a given year, the closing values of the Standard & Poor's (S&P) stock market index in a given month and year, and the percentage of unemployment in a given month and year. 
 
 ## Problem 3
 
@@ -204,14 +221,18 @@ baby_names_df %>%
 We will not create a scatterplot to display the data on the popularity of first names for male, white non-hispanic children born in 2016
 
 ```{r create scatterplot}
-male_name_2016 = 
-  baby_names_df %>%
+baby_names_df %>%
   filter(.data = ., 
          year_of_birth == "2016" & 
          gender == "MALE" & 
-         ethnicity == "WHITE NON HISPANIC")
-
-ggplot(male_name_2016, aes(x = rank, y = count)) +
-  geom_point()
+         ethnicity == "WHITE NON HISPANIC") %>%
+  ggplot(aes(x = rank, y = count)) +
+  geom_point(aes(), alpha = .5) + 
+  labs(
+    title = "Popularity of first name among male, white non-hispanic children born in 2016",
+    x = "Rank in popularity of name",
+    y = "Number of children with name"
+  ) +
+  theme_minimal()
 ```
 
