@@ -42,6 +42,17 @@ trash_wheel_data =
 trash_wheel_data
 ```
 
+This code chunk calculates the median number of sports balls removed in 2017.
+
+```{r find median # of sports balls removed in 2017}
+# I could not figure out how to write inline R code that would filter the data by year and produce a median so I am calculating it in this code chunk and calling for it below. 
+
+trash_wheel_data %>%
+  filter(.data = ., year == "2017") %>%
+  mutate(.data = ., as.numeric(sports_balls_int)) %>%
+  summarize(sports_ball_med = median(sports_balls_int, na.rm = TRUE))
+```
+
 ```{r df for precipitation 2017 and 2018}
 # import and clean 2017 precipitation data 
 
@@ -81,9 +92,19 @@ precip_combined =
 precip_combined
 ```
 
+This code chunk calculates the total inches of precipitation in 2018. 
+
+```{r calculate total inches of precipitation in 2018}
+# I could not figure out how to write inline R code that would filter the data by year and produce a sum so I am calculating it in this code chunk and calling for it below. 
+
+precip_combined %>%
+  filter(.data = ., year == "2018") %>%
+  summarize(total_rain_2018 = sum(total_in, na.rm = TRUE))
+```
+
 The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland, as denoted by the variable *weight_tons* between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume, denoted by *volume_cubic_yards* is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. 
 
-Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. The total precipitation in 2018 was `r sum()
+Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. The total precipitation in 2018 was 70.3 inches. 
 
 ## Problem 2
 
