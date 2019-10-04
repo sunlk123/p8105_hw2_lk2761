@@ -75,15 +75,15 @@ precip_combined =
   bind_rows(precip_2017, precip_2018) %>%
   mutate(.data = ., 
          total_in = round(as.numeric(total_inches), digits = 2),
-         month = month.name[as.numeric(month)]) %>%
+         month = month.name[as.numeric(month)]) %>% 
   select(.data = ., year, month, total_in, -total_inches)
 
 precip_combined
 ```
 
-The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland, as denoted by the variable *weight_tons* between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume, denoted by *volume_cubic_yards* is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. 
+The Mr. Trash Wheel dataset consists of `r nrow(trash_wheel_data)` observations. The mean weight of trash removed by Mr. Trash Wheel in the Inner Harbor of Baltimore, Maryland, as denoted by the variable *weight_tons* between May 2014 and June 2019 is `r round(mean(pull(trash_wheel_data, weight_tons)), 2)` tons and the mean volume, denoted by *volume_cubic_yards* is `r round(mean(pull(trash_wheel_data, volume_cubic_yards)), 2)` cubic yards. The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. 
 
-The median number of sports balls removed in 2017 was `r median(pull(trash_wheel_data, sports_balls_int))` balls. Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. 
+Data on precipitation in 2017 and 2018 were combined into one dataset, which is made up of `r nrow(precip_combined)` observations. The average amount of rainfall from January 2017 to December 2018 was `r round(mean(pull(precip_combined, total_in)), 2)` inches. The total precipitation in 2018 was `r sum()
 
 ## Problem 2
 
@@ -188,7 +188,7 @@ We are using the NYC Popular Baby Names dataset.
 baby_names_df = 
   read.csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names(dat = .) %>%
-  rename(.data = ., child_first_name = child_s_first_name) %>%
+  rename(.data = ., child_first_name = child_s_first_name, num_children = count) %>%
   mutate(.data = ., 
          child_first_name = str_to_upper(child_first_name),
          ethnicity = recode(ethnicity, 
@@ -204,8 +204,8 @@ Creating a reader-friendly table showing the rank in popularity of the name "Oli
 baby_names_df %>%
   filter(.data = ., child_first_name == "OLIVIA") %>%
   pivot_wider(names_from = "year_of_birth",
-              values_from = "ethnicity") %>%
-  select(.data = ., child_first_name, rank, count, "2016", "2015", "2014", "2013", "2012", "2011", -gender) %>%
+              values_from = "num_children") %>%
+  select(.data = ., child_first_name, ethnicity, rank, "2016", "2015", "2014", "2013", "2012", "2011", -gender) %>%
   knitr::kable() 
 ```
 
@@ -216,7 +216,7 @@ baby_names_df %>%
   filter(.data = ., gender == "MALE", rank == "1") %>%
   pivot_wider(names_from = "year_of_birth",
               values_from = "child_first_name") %>%
-  select(.data = ., gender, ethnicity, rank, count, everything()) %>%
+  select(.data = ., gender, ethnicity, rank, num_children, everything()) %>%
   knitr::kable()
 ```
 
@@ -228,7 +228,7 @@ baby_names_df %>%
          year_of_birth == "2016" & 
          gender == "MALE" & 
          ethnicity == "WHITE NON HISPANIC") %>%
-  ggplot(aes(x = rank, y = count)) +
+  ggplot(aes(x = rank, y = num_children)) +
   geom_point(aes(), alpha = .5) + 
   labs(
     title = "Popularity of first name among male, white non-hispanic children born in 2016",
