@@ -226,12 +226,12 @@ baby_names_df %>%
   filter(.data = ., child_first_name == "OLIVIA") %>%
   pivot_wider(names_from = "year_of_birth",
               values_from = "rank") %>%
-  select(.data = ., -child_first_name, everything(), -num_children, -gender) %>%
+  select(.data = ., child_first_name, everything(), -num_children, -gender) %>%
   group_by(.data = ., ethnicity) %>%
   fill("2016", "2015", "2014", "2013", "2012", "2011") %>%
   fill("2016", "2015", "2014", "2013", "2012", "2011", .direction = 'up') %>%
   distinct() %>%
-  knitr::kable(caption = "Table 1. Popularity of the name, Olivia, by ethnicity and year")
+  knitr::kable(caption = "Table 1. Ranking of popularity of the name, Olivia, by ethnicity and year.")
 ```
 
 We will create a reader-friendly table showing the most popular male name (rank = 1) for all ethnicities and all years. 
@@ -246,7 +246,7 @@ baby_names_df %>%
   fill("2016", "2015", "2014", "2013", "2012", "2011") %>%
   fill("2016", "2015", "2014", "2013", "2012", "2011", .direction = 'up') %>%
   distinct() %>%
-  knitr::kable(caption = "Table 2. Most popular male first name by ethnicity and year")
+  knitr::kable(caption = "Table 2. Most popular male first names (rank = 1) by ethnicity and year.")
 ```
 
 We will now create a scatterplot to display the data on the popularity of first names for male, white non-hispanic children born in 2016
