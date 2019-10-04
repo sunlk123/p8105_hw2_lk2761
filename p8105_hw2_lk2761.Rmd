@@ -220,7 +220,11 @@ baby_names_df %>%
   filter(.data = ., gender == "MALE", rank == "1") %>%
   pivot_wider(names_from = "year_of_birth",
               values_from = "child_first_name") %>%
-  select(.data = ., gender, ethnicity, rank, num_children, everything()) %>%
+  select(.data = ., -rank, -num_children, -gender) %>%
+  group_by(.data = ., ethnicity) %>%
+  fill("2016", "2015", "2014", "2013", "2012", "2011") %>%
+  fill("2016", "2015", "2014", "2013", "2012", "2011", .direction = 'up') %>%
+  distinct() %>%
   knitr::kable()
 ```
 
